@@ -112,6 +112,28 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        /* Tic-Tac-Toe CSS */
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 5px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .cell:hover { background-color: #bdc3c7; }
     </style>
 </head>
 <body>
@@ -124,6 +146,7 @@
         <button class="menu-btn" onclick="showGame('snake')">🐍 Snake Game</button>
         <button class="menu-btn" onclick="showGame('dino')">🦖 Jumping Dino</button>
         <button class="menu-btn" onclick="showGame('puzzle')">🧩 Number Puzzle</button>
+        <button class="menu-btn" onclick="showGame('tictactoe')">❌⭕ Tic-Tac-Toe</button>
     </div>
 
     <!-- SNAKE GAME -->
@@ -155,6 +178,25 @@
         <button class="puzzle-btn" onclick="checkGuess()">Guess</button>
         <p id="puzzle-message"></p>
     </div>
+
+    <!-- TIC-TAC-TOE GAME -->
+    <div id="tictactoe-screen" class="game-screen">
+        <button class="back-btn" onclick="showMainMenu()">⬅ Back to Menu</button>
+        <h2>Tic-Tac-Toe</h2>
+        <p id="ttt-status">Turn ng: X</p>
+        <div class="board" id="board">
+            <div class="cell" onclick="makeMove(0)"></div>
+            <div class="cell" onclick="makeMove(1)"></div>
+            <div class="cell" onclick="makeMove(2)"></div>
+            <div class="cell" onclick="makeMove(3)"></div>
+            <div class="cell" onclick="makeMove(4)"></div>
+            <div class="cell" onclick="makeMove(5)"></div>
+            <div class="cell" onclick="makeMove(6)"></div>
+            <div class="cell" onclick="makeMove(7)"></div>
+            <div class="cell" onclick="makeMove(8)"></div>
+        </div>
+        <button class="puzzle-btn" style="margin-top: 15px;" onclick="resetTTT()">Restart Game</button>
+    </div>
 </div>
 
 <script>
@@ -165,6 +207,7 @@
         
         if(gameId === 'snake') startSnake();
         if(gameId === 'dino') startDino();
+        if(gameId === 'tictactoe') resetTTT();
     }
 
     function showMainMenu() {
@@ -301,6 +344,69 @@
         } else {
             msg.innerText = "Masyadong mababa, subukan ulit.";
             msg.style.color = "orange";
+        }
+    }
+
+    // --- TIC-TAC-TOE LOGIC ---
+    let tttBoard = ["", "", "", "", "", "", "", "", ""];
+    let currentPlayer = "X";
+    let gameActive = true;
+
+    function makeMove(index) {
+        if (tttBoard[index] !== "" || !gameActive) return;
+
+        tttBoard[index] = currentPlayer;
+        document.getElementsByClassName("cell")[index].innerText = currentPlayer;
+
+        checkWinTTT();
+    }
+
+    function checkWinTTT() {
+        const winPatterns = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+            [0, 4, 8], [2, 4, 6]             // Diagonals
+        ];
+
+        let roundWon = false;
+        for (let i = 0; i < winPatterns.length; i++) {
+            const [a, b, c] = winPatterns[i];
+            if (tttBoard[a] && tttBoard[a] === tttBoard[b] && tttBoard[a] === tttBoard[c]) {
+                roundWon = true;
+                break;
+            }
+        }
+
+        let statusText = document.getElementById("ttt-status");
+
+        if (roundWon) {
+            statusText.innerText = "Panalo si " + currentPlayer + "! 🎉";
+            statusText.style.color = "lime";
+            gameActive = false;
+            return;
+        }
+
+        if (!tttBoard.includes("")) {
+            statusText.innerText = "Draw! Walang panalo.";
+            statusText.style.color = "orange";
+            gameActive = false;
+            return;
+        }
+
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+        statusText.innerText = "Turn ng: " + currentPlayer;
+    }
+
+    function resetTTT() {
+        tttBoard = ["", "", "", "", "", "", "", "", ""];
+        currentPlayer = "X";
+        gameActive = true;
+        document.getElementById("ttt-status").innerText = "Turn ng: X";
+        document.getElementById("ttt-status").style.color = "white";
+        
+        let cells = document.getElementsByClassName("cell");
+        for(let i=0; i<cells.length; i++) {
+            cells[i].innerText = "";
         }
     }
 </script>

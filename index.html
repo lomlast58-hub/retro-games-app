@@ -134,6 +134,18 @@
             border-radius: 5px;
         }
         .cell:hover { background-color: #bdc3c7; }
+
+        body.light-mode {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+        }
+        body.light-mode h1, body.light-mode h2, body.light-mode p, body.light-mode #dino-score, body.light-mode #ttt-status { 
+            color: #2c3e50 !important; 
+        }
+        body.light-mode .container {
+            background: #ffffff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body>
@@ -142,6 +154,7 @@
     <!-- MAIN MENU -->
     <div id="main-menu" class="game-screen active">
         <h1>🎮 My Mini Games Hub</h1>
+        <button onclick="toggleTheme()" style="background:#f1c40f; color:#2c3e50; border:none; padding:10px 15px; border-radius:5px; cursor:pointer; font-weight:bold; margin-bottom: 15px;">🌓 Toggle Light/Dark Mode</button>
         <p>Pumili ng laro na gusto mong subukan:</p>
         <button class="menu-btn" onclick="showGame('snake')">🐍 Snake Game</button>
         <button class="menu-btn" onclick="showGame('dino')">🦖 Jumping Dino</button>
@@ -408,6 +421,11 @@
         for(let i=0; i<cells.length; i++) {
             cells[i].innerText = "";
         }
+    }
+
+    // --- THEME TOGGLE LOGIC ---
+    function toggleTheme() {
+        document.body.classList.toggle('light-mode');
     }
 </script>
 
